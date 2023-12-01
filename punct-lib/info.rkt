@@ -6,7 +6,6 @@
 (define license 'BlueOak-1.0.0)
 
 (define deps '("at-exp-lib"
-               "commonmark-lib"
                "threading-lib"
                "txexpr"
                "base"))

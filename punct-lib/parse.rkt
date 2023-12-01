@@ -6,9 +6,9 @@
 ;; Parsing utility functions for #lang punct
 
 (require "doc.rkt"
-         commonmark
-         (prefix-in cm: commonmark/struct)
-         commonmark/private/render
+         "./commonmark-lib/commonmark/main.rkt"
+         (prefix-in cm: "./commonmark-lib/commonmark/struct.rkt")
+         "./commonmark-lib/commonmark/private/render.rkt"
          "private/constants.rkt"
          "private/pack.rkt"
          "private/tsexp.rkt"
@@ -48,8 +48,11 @@ after rendering a single document.
     (define/override (render-document)
       (define-values [body footnotes] (super render-document))
       (document my-metas
+                ;; body footnotes
+
                 (decode-single-blocks (reassemble-sexprs body))
-                (decode-single-blocks (reassemble-sexprs footnotes))))
+                (decode-single-blocks (reassemble-sexprs footnotes))
+                ))
     (define/override (render-thematic-break)
       '(thematic-break))
     (define/override (render-heading content level)
@@ -83,11 +86,16 @@ after rendering a single document.
       `(footnote-reference ([label ,label] [defn-num ,(~a defn-num)] [ref-num ,(~a ref-num)])))
     (define/override (render-footnote-definition blocks label ref-count)
       `(footnote-definition ([label ,label] [ref-count ,(~a ref-count)]) ,@blocks))
+
     (super-new)))
 
 (define (string->punct-doc str metas #:who [who 'string->punct-doc])
   (define intermediate-doc (string->document str))
-  (send (new cm/punct-render% [metas metas] [doc intermediate-doc] [who who]) render-document))
+
+  (send (new cm/punct-render% [metas metas] [doc intermediate-doc] [who who]) render-document)
+
+  ;; intermediate-doc
+  )
 
 
 ;; Processes a list of elements into an punct document struct. If

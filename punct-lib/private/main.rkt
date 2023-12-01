@@ -26,6 +26,7 @@
                    [CORE (datum->syntax stx 'punct/core)]
                    [(EXTRA-MODULES ...) (datum->syntax stx #'MODULES)]
                    [ALL-DEFINED (datum->syntax stx '(all-defined-out))])
+       #'(#%module-begin DOC )
        #'(doclang:#%module-begin
           DOC
           ; Function to run after all expressions are evaluated
