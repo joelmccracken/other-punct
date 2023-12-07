@@ -3,7 +3,7 @@
 ; SPDX-License-Identifier: BlueOak-1.0.0
 ; This file is licensed under the Blue Oak Model License 1.0.0.
 
-;; Core functions used by #lang punct sources
+;; Core functions used by #lang prose sources
 
 (require (for-syntax racket/base racket/sequence)
          "doc.rkt"

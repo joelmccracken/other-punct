@@ -3,7 +3,7 @@
 ; SPDX-License-Identifier: BlueOak-1.0.0
 ; This file is licensed under the Blue Oak Model License 1.0.0.
 
-;; Main module expander for #lang punct
+;; Main module expander for #lang prose
 
 (require (for-syntax "constants.rkt"
                      racket/base)
@@ -11,7 +11,7 @@
          "../core.rkt"
          "../parse.rkt")
 
-(provide punct-debug
+(provide prose-debug
          (except-out (all-from-out racket/base) #%module-begin)
          (rename-out [*module-begin #%module-begin]))
 
@@ -19,11 +19,11 @@
   (define prev-metas-id (gensym))
   (syntax-case stx ()
     [(_ INIT-METAS MODULES EXPRS ...)
-     (with-syntax ([DOC punct-doc-id]
-                   [METAS (datum->syntax stx punct-metas-id)]
+     (with-syntax ([DOC prose-doc-id]
+                   [METAS (datum->syntax stx prose-metas-id)]
                    [(METAS-KVS ...) (datum->syntax stx #'INIT-METAS)]
                    [PREV-METAS (datum->syntax stx prev-metas-id)]
-                   [CORE (datum->syntax stx 'punct/core)]
+                   [CORE (datum->syntax stx 'prose/core)]
                    [(EXTRA-MODULES ...) (datum->syntax stx #'MODULES)]
                    [ALL-DEFINED (datum->syntax stx '(all-defined-out))])
        #'(#%module-begin DOC )

@@ -1,12 +1,12 @@
 #lang scribble/manual
 
 @(require [for-label commonmark
-                     punct/core
-                     punct/doc
-                     punct/fetch
-                     punct/parse
-                     punct/render/html
-                     punct/render/plaintext
+                     prose/core
+                     prose/doc
+                     prose/fetch
+                     prose/parse
+                     prose/render/html
+                     prose/render/plaintext
                      racket/base
                      racket/contract/base
                      racket/match
@@ -14,12 +14,12 @@
 @(require scribble/examples "tools.rkt")
 @(define ev (sandbox))
 
-@(ev '(require punct/doc punct/parse))
+@(ev '(require prose/doc prose/parse))
 
 @title[#:style '(toc)]{Punct: CommonMark + Racket}
 @author[(author+email "Joel Dueck" "joel@jdueck.net")]
 
-@defmodulelang[punct]
+@defmodulelang[prose]
 
 Punct is a programming environment for publishing things, implemented in Racket. Punct’s two basic
 ideas are:
@@ -31,8 +31,8 @@ ideas are:
 @item{Multiple output formats. A Punct program/document produces a format-independent AST.}]
 
 The latest version of this documentation can be found at
-@link["https://joeldueck.com/what-about/punct/"]{@tt{joeldueck.com}}. The source and installation
-instructions are at the project’s @link["https://github.com/otherjoel/punct"]{GitHub repo}.
+@link["https://joeldueck.com/what-about/prose/"]{@tt{joeldueck.com}}. The source and installation
+instructions are at the project’s @link["https://github.com/otherjoel/prose"]{GitHub repo}.
 
 @youtube-embed-element["https://www.youtube.com/embed/9zxna1tlvHU"]
 
@@ -49,7 +49,7 @@ and associated terms (attributes, elements, etc).
 Open DrRacket and start a new file like so:
 
 @filebox["Untitled 1"]{@codeblock{
-  #lang punct
+  #lang prose
 
   ---
   author: Me
@@ -64,7 +64,7 @@ As you can see, this document uses
 @hyperlink["https://www.markdownguide.org/basic-syntax/"]{Markdown} formatting and has a little
 metadata block near the beginning. It’s essentially a normal Markdown file, very much like one you
 would use with most publishing systems. The only thing that makes it different is the addition of
-@racketmodfont{#lang punct} at the top.
+@racketmodfont{#lang prose} at the top.
 
 Now click the @onscreen{Run} button in the toolbar. Punct will parse the document’s Markdown content
 and metadata, and produce a @racket[document] struct containing the metadata and an Abstract Syntax
@@ -97,13 +97,13 @@ You can render @racketid{doc} to HTML by passing it to @racket[doc->html]. In th
 
 @examples[#:eval ev
           #:label #f
-          (require punct/render/html)
+          (require prose/render/html)
           (doc->html doc)]
 
 You can escape to Racket code using the @litchar{•} “bullet” character (@tt{U+2022}):
 
 @codeblock{
- #lang punct
+ #lang prose
 
  Today we’re computing •(+ 1 2).
 
@@ -119,7 +119,7 @@ contain valid Markdown, they will be parsed along with the rest of the document.
 produce a bulleted list:
 
 @codeblock{
- #lang punct
+ #lang prose
 
  Three things to remember:
 
@@ -152,7 +152,7 @@ Here is an example of a function that produces a custom @tt{abbreviation} elemen
 attribute:
 
 @codeblock|{
-#lang punct
+#lang prose
 
 •(define (a term . elems)
    `(abbrevation [[term ,term]] ,@elems))
@@ -249,7 +249,7 @@ element (from the examples above) into HTML:
 
 @section{Writing Punct}
 
-Start your Punct source file with @racketmodfont{#lang punct}. Then just write in
+Start your Punct source file with @racketmodfont{#lang prose}. Then just write in
 CommonMark-flavored Markdown.
 
 Punct allows inline Racket code that follows @secref["reader" #:doc '(lib
@@ -262,7 +262,7 @@ Punct source files automaticaly @racket[provide] two bindings: @racketidfont{doc
 @subsection{Using @racket[require]}
 
 By default, Punct programs have access to the bindings in @racketmodname[racket/base] and
-@racketmodname[punct/core]. You can import bindings from other modules in two ways:
+@racketmodname[prose/core]. You can import bindings from other modules in two ways:
 
 @itemlist[#:style 'ordered
 
@@ -272,7 +272,7 @@ By default, Punct programs have access to the bindings in @racketmodname[racket/
 directly on the @hash-lang[] line.}]
 
 @codeblock{
- #lang punct "my-module.rkt" racket/math
+ #lang prose "my-module.rkt" racket/math
 
  •; All bindings in "my-module.rkt" and racket/math are now available
  •; You can also just use require normally
@@ -285,7 +285,7 @@ Sources can optionally add metadata using key: value lines delimited by lines co
 consecutive hyphens:
 
 @codeblock{
- #lang punct
+ #lang prose
  ---
  title: Prepare to be amazed
  date: 2020-05-07
@@ -320,7 +320,7 @@ more formats in the future.
 
 @subsection{Rendering HTML}
 
-@defmodule[punct/render/html]
+@defmodule[prose/render/html]
 
 @defproc[(doc->html [pdoc document?] [fallback (-> symbol? list? list? xexpr?) default-html-tag]) string?]{
 
@@ -356,7 +356,7 @@ Mainly used as the default fallback procedure for @racket[doc->html].
 
 @subsection{Rendering plain text}
 
-@defmodule[punct/render/plaintext]
+@defmodule[prose/render/plaintext]
 
 Sometimes you want to convert a document into a text format that is even plainer than Markdown, such
 as when generating the plaintext version of an email newsletter.
@@ -392,7 +392,7 @@ For more information on using the @racket[_fallback] argument to render custom e
 @secref["rendering-custom-elements"].
 
 @examples[#:eval ev
-          (require punct/render/plaintext)
+          (require prose/render/plaintext)
           (define email (parse-markup-elements (hasheq) '("# Issue No. 1\n\nHowdy!")))
           (display (doc->plaintext email 72))]
 
@@ -416,7 +416,7 @@ X-expression).  Mainly used to create the default fallback procedure for @racket
 
 @subsection{Core}
 
-@defmodule[punct/core]
+@defmodule[prose/core]
 
 @defparam[current-metas metas (or/c hash-eq? #f)]{
 
@@ -446,7 +446,7 @@ Within a Punct file, this macro can be used as shorthand for @racket[set-meta]. 
 is given as a bare identifier (i.e., without using @racket[quote]).
 
 @codeblock{
-#lang punct
+#lang prose
 
 •?[title "Example Title" author "Me"]
 
@@ -456,9 +456,9 @@ is given as a bare identifier (i.e., without using @racket[quote]).
 
 @subsection{Doc}
 
-@defmodule[punct/doc]
+@defmodule[prose/doc]
 
-The bindings provided by this module are also provided by @racketmodname[punct/core].
+The bindings provided by this module are also provided by @racketmodname[prose/core].
 
 @defstruct[document ([metas hash-eq?] [body (listof xexpr?)] [footnotes (listof xexpr?)]) #:prefab]{
 
@@ -471,7 +471,7 @@ X-expressions and not simply lists.}]
 
 @subsection{Fetch}
 
-@defmodule[punct/fetch]
+@defmodule[prose/fetch]
 
 @defproc[(get-doc [src path-string?]) document?]{
 
@@ -491,7 +491,7 @@ will get a friendly error message. If any other kind of problem arises, you will
 
 @subsection{Parse}
 
-@defmodule[punct/parse]
+@defmodule[prose/parse]
 
 @defproc[(parse-markup-elements [metas hash-eq?]
                                 [elements list?]

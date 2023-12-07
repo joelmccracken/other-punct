@@ -82,7 +82,7 @@ and 'html-block elements, that can be matched up to reproduce the original s-exp
   (let* ([strs (string-split (xexpr->string `(,(mark-tag tag) ,attrs)) "><")]
          [opener (~a (car strs) ">")]
          [closer (~a "<" (cadr strs))]
-         [block-delim (if (equal? (attr-ref attrs 'block) punct-block-multi) "\n\n" "")])
+         [block-delim (if (equal? (attr-ref attrs 'block) prose-block-multi) "\n\n" "")])
     (values opener closer block-delim)))
 
 ;; Convert a tagged s-expression to a flat string
@@ -93,10 +93,10 @@ and 'html-block elements, that can be matched up to reproduce the original s-exp
     [(or (null? v) (void? v)) ""]
     [(and (list? v) (symbol? (car v)))
      (define-values (tag attrs elems) (tsexpr->values v))
-     (unless (andmap safe-attr? attrs) (error 'punct "Attributes must be symbol-string pairs: ~a" attrs))
+     (unless (andmap safe-attr? attrs) (error 'prose "Attributes must be symbol-string pairs: ~a" attrs))
      (define-values (tag-open tag-close block-delim) (make-open/close-html-tags tag attrs))
      (string-append* `(,block-delim ,tag-open ,block-delim ,@(map flatpack elems) ,block-delim ,tag-close ,block-delim))]
-    [(procedure? v) (error 'punct "Procedure ~a not a valid value" v)]
+    [(procedure? v) (error 'prose "Procedure ~a not a valid value" v)]
     [else (format "~v" v)]))
 
 ;; Return #t if v is a marked html delimiter
@@ -128,7 +128,7 @@ and 'html-block elements, that can be matched up to reproduce the original s-exp
              (eq? (caar elems) 'paragraph))
         (cdr (car elems))     
         elems))
-  (define new-attrs (filter-not (λ (v) (equal? `(block ,punct-block-multi) v)) attrs))
+  (define new-attrs (filter-not (λ (v) (equal? `(block ,prose-block-multi) v)) attrs))
   `(,tag ,@(if (null? new-attrs) '() (list new-attrs)) ,@new-elems))
 
 

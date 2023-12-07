@@ -5,9 +5,9 @@
          racket/class
          racket/match)
 
-(provide punct-abstract-render%)
+(provide prose-abstract-render%)
 
-(define punct-abstract-render%
+(define prose-abstract-render%
   (class object%
     (init-field doc render-fallback)
     

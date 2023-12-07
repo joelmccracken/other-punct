@@ -1,12 +1,12 @@
 SHELL = /bin/bash
 
-scribble: punct.scrbl
+scribble: prose.scrbl
 scribble: ## Rebuild Scribble docs
-	rm -rf punct/*
-	scribble --htmls +m --redirect https://docs.racket-lang.org/local-redirect/ punct.scrbl
+	rm -rf prose/*
+	scribble --htmls +m --redirect https://docs.racket-lang.org/local-redirect/ prose.scrbl
 
 publish: ## Sync Scribble HTML docs to web server (doesn’t rebuild anything)
-	rsync -av --delete punct/ $(JDCOM_SRV)what-about/punct/
+	rsync -av --delete prose/ $(JDCOM_SRV)what-about/prose/
 
 # Self-documenting makefile (http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html)
 help: ## Displays this help screen

@@ -3,7 +3,7 @@
 right now, i know this project is going to be a big enough hack that i will want
 to take notes, especially since it is likely that i'll put it aside.
 
-rn, what i am starting on is the integration of punct and racket-commonmark
+rn, what i am starting on is the integration of prose and racket-commonmark
 directly together. I don't love the way data doesn't come directly through (its
 not very data-like)
 
@@ -41,7 +41,7 @@ possible sln:
   - this allows to keep the data I expect, hmm
 
 how it works today... just does a regular/normal at-expr lookign thing
-then wraps all of the exprs in a runtime-wrapper / _punct-main  module
+then wraps all of the exprs in a runtime-wrapper / _prose-main  module
 
 
 
@@ -52,14 +52,14 @@ tracing how it all fits together, so convoluted seeming
 
 
 
-~/Projects/punct/punct-lib/main.rkt does the at-expr business.
+~/Projects/prose/prose-lib/main.rkt does the at-expr business.
 - resultant module (~runtime-wrapper~)
   - itself has a module inside, configure-runtime (no idea what it does?)
     - does the display logic when module is run according to comment in
-      ~/Projects/punct/punct-lib/private/configure-runtime.rkt
-  - another module, _punct-main - obv the "main" runtime thing?
+      ~/Projects/prose/prose-lib/private/configure-runtime.rkt
+  - another module, _prose-main - obv the "main" runtime thing?
   - which is then required into runtime-wrapper (why?)
     - only brings in the show function??? show function used to "show" document
       when run as module
 
-- what is punct-doc-id??? comes from constatnts, doc-id prefixed with punct-
+- what is prose-doc-id??? comes from constatnts, doc-id prefixed with prose-

@@ -2,11 +2,11 @@
 
 (define collection 'multi)
 (define deps
-  '("punct-lib"
-    "punct-doc"))
+  '("prose-lib"
+    "prose-doc"))
 (define implies
-  '("punct-lib"
-    "punct-doc"))
+  '("prose-lib"
+    "prose-doc"))
 (define pkg-desc
   "Markdown + Racket document authoring environment")
 (define license

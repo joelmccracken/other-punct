@@ -3,7 +3,7 @@
 ; SPDX-License-Identifier: BlueOak-1.0.0
 ; This file is licensed under the Blue Oak Model License 1.0.0.
 
-;; Parsing utility functions for #lang punct
+;; Parsing utility functions for #lang prose
 
 (require "doc.rkt"
          "./commonmark-lib/commonmark/main.rkt"
@@ -18,19 +18,19 @@
          racket/match
          threading)
 
-(provide punct-debug
+(provide prose-debug
          parse-markup-elements)
 
-(define punct-debug (make-parameter #f))
+(define prose-debug (make-parameter #f))
 
 ;;
 ;; ~~ Parsing functions ~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;;
 
-#| cm/punct-render%
+#| cm/prose-render%
 
 A subclass of the abstract-render% class from commonmark/private/render that
-simply renders the document to interpunct’s own document struct (see
+simply renders the document to interprose’s own document struct (see
 private/doc for more info on the differences from the document struct
 provided by commonmark).
 
@@ -41,7 +41,7 @@ instances of abstract-render% subclasses are stateful and should be discarded
 after rendering a single document.
 |#
 
-(define cm/punct-render%
+(define cm/prose-render%
   (class abstract-render%
     (init metas)
     (define my-metas metas)
@@ -89,16 +89,16 @@ after rendering a single document.
 
     (super-new)))
 
-(define (string->punct-doc str metas #:who [who 'string->punct-doc])
+(define (string->prose-doc str metas #:who [who 'string->prose-doc])
   (define intermediate-doc (string->document str))
 
-  (send (new cm/punct-render% [metas metas] [doc intermediate-doc] [who who]) render-document)
+  (send (new cm/prose-render% [metas metas] [doc intermediate-doc] [who who]) render-document)
 
   ;; intermediate-doc
   )
 
 
-;; Processes a list of elements into an punct document struct. If
+;; Processes a list of elements into an prose document struct. If
 ;; extract-inline? is #t and the resulting doc contains only a single paragraph
 ;; and no footnotes, only the inline content of the paragraph is returned.
 (define (parse-markup-elements metas elems
@@ -109,11 +109,11 @@ after rendering a single document.
       (~> (splice elems)
           (map flatpack _)
           (apply string-append _)
-          (string->punct-doc metas #:who 'parse-markup-elements))))
+          (string->prose-doc metas #:who 'parse-markup-elements))))
   
   (if extract-inline?
       (match doc
-        [(document _ (list (list* paragraph content)) _) `(,punct-splicing-tag ,content)]
+        [(document _ (list (list* paragraph content)) _) `(,prose-splicing-tag ,content)]
         [_ doc])
       doc))
  
@@ -123,7 +123,7 @@ after rendering a single document.
     (if (list? x)
         (append-map
          (λ (x)
-           (define proc (if (and (list? x) (not (null? x)) (eq? punct-splicing-tag (car x))) rest list))
+           (define proc (if (and (list? x) (not (null? x)) (eq? prose-splicing-tag (car x))) rest list))
            (proc (loop x)))
          x)
         x)))
@@ -133,7 +133,7 @@ after rendering a single document.
   (let loop ([x lst])
     (match x
       [(list 'paragraph (list (? symbol? tag) (list-no-order (list 'block blocktype) attrs ...) elems ...))
-       #:when (equal? blocktype punct-block-single)
+       #:when (equal? blocktype prose-block-single)
        `(,tag ,@(if (null? attrs) '() (list attrs)) ,@(map decode-single-blocks elems))]
       [(list* (? symbol? tag) (list (? attr? attrs) ...) elems)
        `(,tag ,attrs ,@(map decode-single-blocks elems))]
