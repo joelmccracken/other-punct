@@ -3,7 +3,7 @@
 ; SPDX-License-Identifier: BlueOak-1.0.0
 ; This file is licensed under the Blue Oak Model License 1.0.0.
 
-;; Functions used by punct’s reader to grab shorthand requires and metas
+;; Functions used by prose’s reader to grab shorthand requires and metas
 
 (require syntax/readerr)
 

@@ -1,7 +1,7 @@
 #lang info
 
-(define collection "punct")
-(define scribblings '(("punct.scrbl")))
+(define collection "prose")
+(define scribblings '(("prose.scrbl")))
 
 (define deps '("scribble-lib"
                "base"))
@@ -9,9 +9,9 @@
                      "commonmark-lib"
                      "racket-doc"
                      "scribble-doc"
-                     "punct-lib"))
+                     "prose-lib"))
 
-(define update-implies '("punct-lib"))
+(define update-implies '("prose-lib"))
 
-(define pkg-desc "documentation part of \"punct\"")
+(define pkg-desc "documentation part of \"prose\"")
 (define license 'BlueOak-1.0.0)

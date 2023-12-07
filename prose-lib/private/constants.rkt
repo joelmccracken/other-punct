@@ -5,7 +5,7 @@
 
 ;; Library constants
 
-(provide (prefix-out punct- (all-defined-out)))
+(provide (prefix-out prose- (all-defined-out)))
 
 (define command-char  #\•)
 (define here-path-key 'here-path)

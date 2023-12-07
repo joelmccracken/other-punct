@@ -6,7 +6,7 @@
 
 (require racket/pretty)
 
-;; These two bindings are used in the reader to ensure that when an Interpunct
+;; These two bindings are used in the reader to ensure that when an Interprose
 ;; is run as the top-level-module, its doc is displayed as output, but not
 ;; otherwise.
 (provide current-top-path show)

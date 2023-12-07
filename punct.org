@@ -1,0 +1,65 @@
+#+title: Punct
+
+right now, i know this project is going to be a big enough hack that i will want
+to take notes, especially since it is likely that i'll put it aside.
+
+rn, what i am starting on is the integration of prose and racket-commonmark
+directly together. I don't love the way data doesn't come directly through (its
+not very data-like)
+
+
+
+thinking this whole thing through for notes:
+
+- prose/authoring should be in a document. Documents should ahve custom
+  elements, with specific semantics.
+- each element in prose document is data;
+- different ways may be used to render the prose, or read it, etc, depending
+  upon the context.
+- it _may_ be needed to embed some kind of programming language in this kind of
+  prose document, but that should certainly not the the norm/standard.
+  - the problem with doing it like this is then you're forced to do things like
+    say "ok, if I am rendering html, do this, otherwise, do that". that's wrong.
+  - however i can imagine desiring like functions which will "write" document
+    elements for me, nice helpers, etc, which will make writing less verbose.
+    Maybe this would exist, maybe it won't.
+
+
+
+descirbing the problem
+- commonmark flattens stuff/no nesting
+  - need to figure out this context  - where are they introduced?
+- commonmark needs to parse a string, not a string+list data structure; need to
+  convert to string.
+  - alternative solution which may work: simply save all of the datum in
+    document, give each one an ID of some kind, and go.
+
+possible sln:
+- save data in hashmap
+- insert <DATUM id=<whatever>> ... </DATUM>
+- restore afterwards
+  - this allows to keep the data I expect, hmm
+
+how it works today... just does a regular/normal at-expr lookign thing
+then wraps all of the exprs in a runtime-wrapper / _prose-main  module
+
+
+
+lots of wrapping in extra modules, why?
+
+
+tracing how it all fits together, so convoluted seeming
+
+
+
+~/Projects/prose/prose-lib/main.rkt does the at-expr business.
+- resultant module (~runtime-wrapper~)
+  - itself has a module inside, configure-runtime (no idea what it does?)
+    - does the display logic when module is run according to comment in
+      ~/Projects/prose/prose-lib/private/configure-runtime.rkt
+  - another module, _prose-main - obv the "main" runtime thing?
+  - which is then required into runtime-wrapper (why?)
+    - only brings in the show function??? show function used to "show" document
+      when run as module
+
+- what is prose-doc-id??? comes from constatnts, doc-id prefixed with prose-

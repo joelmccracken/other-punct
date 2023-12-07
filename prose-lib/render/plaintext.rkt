@@ -3,7 +3,7 @@
 ; SPDX-License-Identifier: BlueOak-1.0.0
 ; This file is licensed under the Blue Oak Model License 1.0.0.
 
-;; Renders punct documents to plain text
+;; Renders prose documents to plain text
 
 (require "base.rkt"
          net/uri-codec
@@ -58,8 +58,8 @@
       (map (prefix+joiner prefix) lines)])
    (if break? "\n" "")))
 
-(define punct-plaintext-render%
-  (class punct-abstract-render%
+(define prose-plaintext-render%
+  (class prose-abstract-render%
     (init line-width)
     (define width line-width)
     (define inset-width (inexact->exact (floor (* width .75))))
@@ -129,4 +129,4 @@
     (wrap-text (cons (format "[~a] " tag) elems) width)))
 
 (define (doc->plaintext doc width [fallback (make-plaintext-fallback width)])
-  (send (new punct-plaintext-render% [doc doc] [line-width width] [render-fallback fallback]) render-document))
+  (send (new prose-plaintext-render% [doc doc] [line-width width] [render-fallback fallback]) render-document))

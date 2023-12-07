@@ -3,7 +3,7 @@
 ; SPDX-License-Identifier: BlueOak-1.0.0
 ; This file is licensed under the Blue Oak Model License 1.0.0.
 
-;; Renders interpunct documents to HTML x-expressions
+;; Renders interprose documents to HTML x-expressions
 
 (require "base.rkt"
          net/uri-codec
@@ -16,13 +16,13 @@
          txexpr
          (only-in xml xexpr->string))
 
-(provide punct-html-render%
+(provide prose-html-render%
          doc->html
          doc->html-xexpr
          default-html-tag)
 
-(define punct-html-render%
-  (class punct-abstract-render%
+(define prose-html-render%
+  (class prose-abstract-render%
     (define/override (render-document)
       (define-values [body footnotes] (super render-document))
       (if (null? footnotes)
@@ -95,7 +95,7 @@
     (super-new)))
 
 (define (doc->html-xexpr doc [fallback default-html-tag])
-  (send (new punct-html-render% [doc doc] [render-fallback fallback]) render-document))
+  (send (new prose-html-render% [doc doc] [render-fallback fallback]) render-document))
 
 (define (doc->html doc [fallback default-html-tag])
   (xexpr->html (doc->html-xexpr doc fallback)))
